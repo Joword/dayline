@@ -1,0 +1,53 @@
+# Development: hot reload with polling (edits from the Windows side of /mnt/f raise no
+# inotify events), source bind-mounted, ports on localhost only.
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+services:
+  mongo:
+    ports:
+      - "127.0.0.1:${MONGO_PORT:-27017}:27017"   # host CLI uses ...?directConnection=true
+
+  api:
+    image: dayline-backend:dev
+    build:
+      target: dev
+    environment:
+      DAYLINE_ENV: dev
+      WATCHFILES_FORCE_POLLING: "true"
+    volumes:
+      - ./backend:/app/backend
+      - ./skills:/app/skills
+      - ./config:/app/config
+    ports:
+      - "127.0.0.1:${DAYLINE_API_PORT:-8000}:8000"
+
+  worker:
+    image: dayline-backend:dev
+    build:
+      target: dev
+    environment:
+      DAYLINE_ENV: dev
+    volumes:
+      - ./backend:/app/backend
+      - ./skills:/app/skills
+      - ./config:/app/config
+
+  web:
+    image: dayline-web:dev
+    build:
+      target: dev
+    depends_on: !reset []
+    environment:
+      DAYLINE_API_URL: http://api:8000
+      DAYLINE_INSECURE_COOKIES: "1"
+    volumes:
+      - ./web:/app
+      - web-node-modules:/app/node_modules   # keep node_modules on the Linux FS, not /mnt/f
+    ports:
+      - "127.0.0.1:${DAYLINE_WEB_PORT:-3000}:3000"
+
+volumes:
+  web-node-modules:
+
+networks:
+  data:
+    internal: false   # allow the published mongo port in dev

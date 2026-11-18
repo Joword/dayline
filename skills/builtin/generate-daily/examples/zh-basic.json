@@ -1,0 +1,57 @@
+{
+  "name": "zh-basic",
+  "lang": "zh",
+  "fewshot": true,
+  "inputs": {
+    "date": "2026-11-17",
+    "narrative": "上午把支付回调的重试机制上线了,观察了一下午,回调失败率从 2% 左右降到 0.3%。下午继续写对账报表,大概完成六成,周三应该能写完。风控那边的接口文档还没给,导出功能卡着没法做。明天先把对账报表的导出做完。"
+  },
+  "output": {
+    "kind": "individual",
+    "date": "2026-11-17",
+    "lang": "zh",
+    "own_items": [
+      {
+        "kind": "done",
+        "text": "上线支付回调重试机制,回调失败率从约 2% 降到 0.3%",
+        "source": "manual"
+      },
+      {
+        "kind": "progress",
+        "text": "对账报表开发",
+        "source": "manual",
+        "progress": "60%",
+        "eta": "2026-11-19"
+      },
+      {
+        "kind": "blocker",
+        "text": "导出功能缺少风控接口文档,暂无法开发",
+        "source": "manual",
+        "need_from": "风控组",
+        "severity": "high",
+        "cross_team": true
+      },
+      {
+        "kind": "plan",
+        "text": "完成对账报表导出",
+        "source": "manual",
+        "priority": "P1"
+      }
+    ],
+    "plan_check": [],
+    "questions": []
+  },
+  "expect": {
+    "status": "ok",
+    "min_items": {
+      "done": 1,
+      "progress": 1,
+      "blocker": 1,
+      "plan": 1
+    },
+    "contains": [
+      "0.3%"
+    ],
+    "all_sources": "manual"
+  }
+}

@@ -1,0 +1,9 @@
+# Deadline orchestration (plan §4.5). Times are HH:MM in DAYLINE_TIMEZONE.
+# Each management level above the first runs `level_gap_minutes` later, so a middle
+# manager's roll-up exists before their own manager's deadline.
+default:
+  deadline: "18:00"   # members' reports due; reminders go to those who have not submitted
+  rollup: "18:30"     # the manager's team roll-up is drafted (the manager confirms it)
+level_gap_minutes: 60
+org_units: {}
+#  支付组: {deadline: "18:30", rollup: "19:00"}

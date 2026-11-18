@@ -1,0 +1,56 @@
+{
+  "name": "zh-team",
+  "lang": "zh",
+  "fewshot": true,
+  "inputs": {"date": "2026-11-17"},
+  "context": {
+    "team_snapshot": {
+      "date": "2026-11-17",
+      "members": [
+        {
+          "id": "zhangsan", "name": "张三", "on_track": false,
+          "items": [
+            {"kind": "done", "text": "上线支付回调重试机制,回调失败率从约 2% 降到 0.3%"},
+            {"kind": "progress", "text": "对账报表导出开发", "progress": "30%"},
+            {"kind": "blocker", "text": "导出功能缺少风控接口文档,暂无法联调", "need_from": "风控组", "severity": "high", "cross_team": true}
+          ],
+          "signals": [
+            {"type": "lingering_blocker", "text": "导出功能缺少风控接口文档,暂无法联调", "reports": 2, "dates": ["2026-11-17", "2026-11-16"], "detail": {"severity": "high"}}
+          ]
+        },
+        {
+          "id": "wangwu", "name": "王五", "on_track": true,
+          "items": [
+            {"kind": "done", "text": "修复订单列表分页错乱问题(#1432),已上线"},
+            {"kind": "progress", "text": "退款对账任务开发", "progress": "50%", "eta": "2026-11-19"}
+          ],
+          "signals": []
+        },
+        {
+          "id": "sunqi", "name": "孙七", "on_track": true,
+          "items": [
+            {"kind": "done", "text": "完成支付渠道费率配置后台,运营已开始使用"},
+            {"kind": "plan", "text": "接入第二家支付渠道的沙箱环境", "priority": "P2"}
+          ],
+          "signals": []
+        }
+      ],
+      "missing": [{"id": "zhaoliu", "name": "赵六"}]
+    }
+  },
+  "output": {
+    "summary": "支付组今天上线了回调重试(失败率降到 0.3%)和费率配置后台,订单分页问题已修复;对账报表导出被风控接口文档阻塞,是当前最大的风险。",
+    "highlights": [
+      {"text": "支付回调重试上线,回调失败率从约 2% 降到 0.3%", "members": ["zhangsan"]},
+      {"text": "支付渠道费率配置后台完成,运营已开始使用", "members": ["sunqi"]},
+      {"text": "订单列表分页错乱问题修复并上线", "members": ["wangwu"]}
+    ],
+    "risks": [
+      {"text": "对账报表导出缺少风控接口文档,阻塞已持续两份日报", "members": ["zhangsan"], "severity": "high"}
+    ],
+    "escalation_candidates": [
+      {"text": "风控接口文档迟迟未提供,影响对账报表交付", "members": ["zhangsan"], "reason": "跨团队依赖,团队内部无法解决,已持续两份日报", "need_from": "风控组"}
+    ]
+  },
+  "expect": {"status": "ok", "members_exclude": ["zhaoliu"], "stats": {"members": 4, "submitted": 3, "on_track": 2}, "contains": ["赵六"]}
+}

@@ -1,0 +1,39 @@
+{
+  "name": "zh-risk-direct",
+  "lang": "zh",
+  "inputs": {"member": "zhaoliu", "date": "2026-11-17", "tone": "direct"},
+  "context": {
+    "member_report": {
+      "member": {"id": "zhaoliu", "name": "赵六", "org_unit": "支付组"},
+      "date": "2026-11-17",
+      "version": 1,
+      "items": [
+        {"kind": "progress", "text": "支付网关升级到新版 SDK", "progress": "40%", "eta": "2026-11-14"},
+        {"kind": "blocker", "text": "测试环境证书过期,支付网关无法联调", "need_from": "运维组", "severity": "high", "cross_team": true},
+        {"kind": "plan", "text": "继续支付网关升级"}
+      ],
+      "plan_check": [{"plan_text": "完成支付网关升级联调", "status": "not_started", "note": "环境问题"}]
+    },
+    "member_trends": {
+      "signals": [
+        {"type": "stalled", "text": "支付网关升级到新版 SDK", "reports": 3, "dates": ["2026-11-17", "2026-11-16", "2026-11-13"], "detail": {"progress": "40%"}},
+        {"type": "overdue", "text": "支付网关升级到新版 SDK", "reports": 1, "dates": ["2026-11-17"], "detail": {"eta": "2026-11-14"}},
+        {"type": "lingering_blocker", "text": "测试环境证书过期,支付网关无法联调", "reports": 3, "dates": ["2026-11-17", "2026-11-16", "2026-11-13"], "detail": {"severity": "high"}},
+        {"type": "delayed_plan", "text": "完成支付网关升级联调", "reports": 3, "dates": ["2026-11-16", "2026-11-13", "2026-11-12"], "detail": {"in_progress_today": false}}
+      ],
+      "earlier_reports": [
+        {"date": "2026-11-16", "items": [
+          {"kind": "progress", "text": "支付网关升级到新版 SDK", "progress": "40%"},
+          {"kind": "blocker", "text": "测试环境证书过期,无法联调", "severity": "high"},
+          {"kind": "plan", "text": "完成支付网关升级联调"}
+        ]},
+        {"date": "2026-11-13", "items": [
+          {"kind": "progress", "text": "支付网关升级到新版 SDK", "progress": "40%"},
+          {"kind": "blocker", "text": "测试环境证书过期", "severity": "high"},
+          {"kind": "plan", "text": "完成支付网关升级联调"}
+        ]}
+      ]
+    }
+  },
+  "expect": {"status": "ok", "rating": "risk", "min_trend_flags": 2, "min_escalations": 1}
+}

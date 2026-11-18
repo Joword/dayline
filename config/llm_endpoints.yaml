@@ -1,0 +1,48 @@
+endpoints:
+  - name: anthropic-direct
+    adapter: anthropic
+    proxy: none                          # strictly direct; ignores HTTP(S)_PROXY
+    api_key_env: ANTHROPIC_API_KEY
+    models: {small: claude-haiku-5-5, large: claude-sonnet-5-5}   # use whatever models your account has
+    max_data_level: L3
+    features: {tool_calling: true, json_schema: true, streaming: true, prompt_caching: true, effort: true}
+    # Server-side refusal fallback (beta) for the large model; Haiku 5.5 has none.
+    server_fallback_models: [claude-sonnet-5-5]
+
+  - name: anthropic-via-proxy
+    adapter: anthropic
+    proxy: ${DAYLINE_LLM_PROXY:-http://proxy.corp:8080}
+    api_key_env: ANTHROPIC_API_KEY
+    models: {small: claude-haiku-5-5, large: claude-sonnet-5-5}
+    max_data_level: L3
+    features: {tool_calling: true, json_schema: true, streaming: true, prompt_caching: true, effort: true}
+    server_fallback_models: [claude-sonnet-5-5]
+
+  - name: corp-gateway                    # corp LLM gateway; forwards only to intranet models
+    adapter: anthropic                    # Anthropic-compatible mode first; switch to openai_compat if it falls short
+    base_url: ${DAYLINE_CORP_LLM_URL:-https://llm.corp.internal}
+    api_key_env: CORP_LLM_API_KEY
+    auth_header: x-api-key                # check what the gateway expects: bearer | x-api-key
+    models: {small: TODO, large: TODO}    # intranet model names
+    max_data_level: L3                    # data stays inside the intranet
+    max_context: TODO
+    features: {tool_calling: TODO, json_schema: TODO, streaming: TODO, prompt_caching: false, effort: false}
+    max_tool_turns: 1                     # lower tool budget on the backup endpoint
+    prompt_variant: corp                  # uses prompt.<lang>.corp.md where a skill provides one
+
+  # - name: local-model                   # reserved: self-hosted intranet model, not developed yet
+  #   adapter: openai_compat
+  #   base_url: http://llm-local:8000
+
+failover:
+  order: [anthropic-direct, anthropic-via-proxy, corp-gateway]
+  retry: 2
+  backoff_base_s: 0.5
+  backoff_max_s: 8
+  circuit_breaker: {failures: 3, cooldown_s: 60}
+
+# USD per million tokens, for skill_runs.cost. Check current prices before relying on them.
+# Unlisted cache prices default to 0.1x (read) and 1.25x (write) of the input price.
+pricing:
+  claude-sonnet-5-5: {input: 2.00, output: 10.00, cache_read: 0.10}
+  claude-haiku-5-5: {input: 0.10, output: 0.50}   # rate for prompts up to 100K tokens

@@ -1,0 +1,79 @@
+{
+  "name": "zh-with-activity",
+  "lang": "zh",
+  "fewshot": true,
+  "inputs": {
+    "date": "2026-11-17",
+    "narrative": "上午把支付回调超时重试的 bug 修了,MR 已经合了。下午开对账方案评审会,定了用 T+1 对账。"
+  },
+  "context": {
+    "own_activity": {
+      "date": "2026-11-17",
+      "git": {
+        "provider": "gitlab",
+        "repos": [
+          {
+            "repo": "pay/payment-service",
+            "commit_count": 4,
+            "prs": [
+              {
+                "number": 482,
+                "title": "fix: retry payment callback on timeout",
+                "url": "https://gitlab.example.com/pay/payment-service/-/merge_requests/482",
+                "state": "merged",
+                "commits": ["fix: retry payment callback on timeout", "test: cover callback timeout", "fix: cap retry backoff"]
+              }
+            ],
+            "other_commits": [
+              {"title": "feat: add metrics for callback retries", "url": "https://gitlab.example.com/pay/payment-service/-/commit/9f1c2ab", "time": "17:40"}
+            ]
+          }
+        ],
+        "totals": {"commits": 4, "repos": 1, "prs": 1},
+        "dropped": {"merge": 1}
+      },
+      "calendar": {
+        "events": [
+          {"title": "支付组站会", "start": "10:00", "end": "10:15", "minutes": 15, "attendees": 8, "organizer": false},
+          {"title": "对账方案评审", "start": "14:00", "end": "16:00", "minutes": 120, "attendees": 6, "organizer": false}
+        ],
+        "count": 2,
+        "total_minutes": 135,
+        "dropped": {"placeholder": 1}
+      },
+      "unavailable": {},
+      "errors": {}
+    }
+  },
+  "output": {
+    "kind": "individual",
+    "date": "2026-11-17",
+    "lang": "zh",
+    "own_items": [
+      {
+        "kind": "done",
+        "text": "修复支付回调超时重试问题,MR !482 已合并",
+        "source": "git",
+        "ref_url": "https://gitlab.example.com/pay/payment-service/-/merge_requests/482",
+        "evidence": {"commits": 3}
+      },
+      {
+        "kind": "done",
+        "text": "对账方案评审:确定采用 T+1 对账",
+        "source": "calendar",
+        "evidence": {"meetings": 1, "hours": 2}
+      },
+      {
+        "kind": "done",
+        "text": "新增回调重试的监控指标",
+        "source": "git",
+        "ref_url": "https://gitlab.example.com/pay/payment-service/-/commit/9f1c2ab",
+        "evidence": {"commits": 1},
+        "pending_confirmation": true
+      }
+    ],
+    "plan_check": [],
+    "questions": ["T+1 对账方案确定后,接下来的落地由谁负责、计划什么时候开始?"]
+  },
+  "expect": {"status": "ok", "min_items": {"done": 2}, "contains": ["T+1"]}
+}

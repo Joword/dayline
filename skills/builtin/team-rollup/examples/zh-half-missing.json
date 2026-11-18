@@ -1,0 +1,39 @@
+{
+  "name": "zh-half-missing",
+  "lang": "zh",
+  "inputs": {"date": "2026-11-17"},
+  "context": {
+    "team_snapshot": {
+      "date": "2026-11-17",
+      "members": [
+        {
+          "id": "zhouba", "name": "周八", "on_track": true,
+          "items": [
+            {"kind": "done", "text": "风控规则引擎接入新规则 12 条,误拦率从 1.5% 降到 0.8%"},
+            {"kind": "plan", "text": "灰度上线规则引擎到 20% 流量", "priority": "P1"}
+          ],
+          "signals": []
+        },
+        {
+          "id": "wujiu", "name": "吴九", "on_track": false,
+          "items": [
+            {"kind": "progress", "text": "设备指纹 SDK 集成", "progress": "40%", "eta": "2026-11-15"},
+            {"kind": "blocker", "text": "安卓端 SDK 与现有加固方案冲突,需要安全组确认", "need_from": "安全组", "severity": "medium", "cross_team": true}
+          ],
+          "signals": [
+            {"type": "overdue", "text": "设备指纹 SDK 集成", "reports": 1, "dates": ["2026-11-17"], "detail": {"eta": "2026-11-15"}},
+            {"type": "stalled", "text": "设备指纹 SDK 集成", "reports": 3, "dates": ["2026-11-17", "2026-11-16", "2026-11-13"], "detail": {"progress": "40%"}}
+          ]
+        }
+      ],
+      "missing": [{"id": "zhengshi", "name": "郑十"}, {"id": "fengshiyi", "name": "冯十一"}]
+    }
+  },
+  "expect": {
+    "status": "ok",
+    "members_exclude": ["zhengshi", "fengshiyi"],
+    "not_in_sections": ["郑十", "冯十一"],
+    "stats": {"members": 4, "submitted": 2, "on_track": 1},
+    "contains": ["郑十", "冯十一"]
+  }
+}

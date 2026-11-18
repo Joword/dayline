@@ -1,0 +1,28 @@
+{
+  "name": "en-slipped-plan",
+  "lang": "en",
+  "inputs": {"member": "sam", "date": "2026-11-17", "tone": "encouraging"},
+  "context": {
+    "member_report": {
+      "member": {"id": "sam", "name": "Sam", "org_unit": "Web"},
+      "date": "2026-11-17",
+      "version": 1,
+      "items": [
+        {"kind": "done", "text": "Shipped the CSV import (PR #91), used by 3 customers on day one"},
+        {"kind": "progress", "text": "Dashboard query optimisation", "progress": "investigating"},
+        {"kind": "plan", "text": "Dashboard"}
+      ],
+      "plan_check": [{"plan_text": "Cut dashboard load time below 2s", "status": "in_progress"}]
+    },
+    "member_trends": {
+      "signals": [
+        {"type": "delayed_plan", "text": "Cut dashboard load time below 2s", "reports": 2, "dates": ["2026-11-16", "2026-11-13"], "detail": {"in_progress_today": true}}
+      ],
+      "earlier_reports": [
+        {"date": "2026-11-16", "items": [{"kind": "plan", "text": "Cut dashboard load time below 2s"}]},
+        {"date": "2026-11-13", "items": [{"kind": "plan", "text": "Cut dashboard load time below 2s"}]}
+      ]
+    }
+  },
+  "expect": {"status": "ok", "rating": ["attention", "risk"], "min_trend_flags": 1, "min_issues": 1}
+}

@@ -1,0 +1,24 @@
+# Intranet collector config: copy to config/collector.yaml (git-ignored). Values may be ${ENV}.
+# The collector reads intranet sources and pushes only summaries to the main system.
+target: https://dayline.example.com/v1   # the API behind the gateway
+token: ${DAYLINE_COLLECTOR_TOKEN}
+integration_proxy: null
+users:
+  - user_id: zhangsan
+    timezone: Asia/Shanghai
+    git:
+      - type: git
+        provider: gitlab
+        base_url: https://gitlab.corp.internal
+        token: ${ZHANGSAN_GITLAB_PAT}        # read_api scope only
+        emails: [zhangsan@corp.com]
+        proxy: none
+        ca_bundle: /certs/corp-ca.pem
+    calendar:
+      - type: calendar
+        provider: coremail
+        mode: caldav
+        caldav_url: https://mail.corp.internal/dav/
+        username: zhangsan@corp.com
+        password: ${ZHANGSAN_COREMAIL_CLIENT_PW}   # client-specific password, never the mailbox password
+        proxy: none

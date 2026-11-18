@@ -1,0 +1,29 @@
+name: review-member
+version: 1.0.0
+description: 审阅别人发来的日报:一句话摘要、质量问题、追问清单和语气友好的反馈草稿
+roles: [member, manager]
+triggers:
+  commands: ["/review", "dl review"]
+  intents: ["审阅日报", "帮我看看这份日报", "review this report"]
+inputs:
+  - name: report
+    type: text
+    required: true
+    description: 要审阅的日报原文(粘贴文本或文件内容)
+    max_chars: 20000
+  - name: author
+    type: string
+    description: 日报作者的称呼(可选,用于反馈草稿)
+    max_chars: 100
+  - name: context
+    type: text
+    description: 背景信息,例如对方的岗位、负责的项目(可选)
+    max_chars: 4000
+rules: [input-size, quotes-grounded]
+model: large
+fallback: allow
+output:
+  schema: schema.py:ReviewResult
+  render: [markdown]
+  template: review
+permissions: []

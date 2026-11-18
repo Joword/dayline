@@ -1,0 +1,68 @@
+# Production overrides. Images are pinned by tag (git sha or version) - never `latest`.
+#   DAYLINE_IMAGE_TAG=1.2.0 DAYLINE_PROFILE=intranet \
+#     docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# The gateway (Caddy, HTTPS) is the only published port; api / web / mongo stay internal.
+# TLS per environment: DAYLINE_TLS_MODE = auto (cloud) | files (intranet, /certs) | internal.
+services:
+  mongo:
+    deploy:
+      resources:
+        limits: {memory: 2g}
+
+  api:
+    image: ${DAYLINE_REGISTRY:-}dayline-backend:${DAYLINE_IMAGE_TAG:?set DAYLINE_IMAGE_TAG to a git sha or version}
+    environment:
+      DAYLINE_ENV: prod
+      DAYLINE_SKILLS_HOT_RELOAD: "true"
+      FORWARDED_ALLOW_IPS: "*"   # only the gateway can reach the API
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+    deploy:
+      resources:
+        limits: {memory: 1g}
+
+  worker:
+    image: ${DAYLINE_REGISTRY:-}dayline-backend:${DAYLINE_IMAGE_TAG:?set DAYLINE_IMAGE_TAG to a git sha or version}
+    environment:
+      DAYLINE_ENV: prod
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+    deploy:
+      resources:
+        limits: {memory: 512m}
+
+  web:
+    image: ${DAYLINE_REGISTRY:-}dayline-web:${DAYLINE_IMAGE_TAG:?set DAYLINE_IMAGE_TAG to a git sha or version}
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+    deploy:
+      resources:
+        limits: {memory: 512m}
+
+  gateway:
+    image: caddy:2.11
+    depends_on:
+      web: {condition: service_healthy}
+    env_file:   # DAYLINE_DOMAIN / DAYLINE_TLS_MODE come from the deployment profile (or .env)
+      - path: deploy/profiles/${DAYLINE_PROFILE:-server}.env
+        required: false
+      - path: .env
+        required: false
+    ports:
+      - "${DAYLINE_HTTP_PORT:-80}:80"
+      - "${DAYLINE_HTTPS_PORT:-443}:443"
+      - "${DAYLINE_HTTPS_PORT:-443}:443/udp"
+    volumes:
+      - ./docker/gateway/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./deploy/certs:/certs:ro            # intranet: company-issued dayline.crt / dayline.key
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [egress]
+    restart: unless-stopped
+
+volumes:
+  caddy-data:
+  caddy-config:

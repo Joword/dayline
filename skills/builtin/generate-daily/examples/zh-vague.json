@@ -1,0 +1,14 @@
+{
+  "name": "zh-vague",
+  "lang": "zh",
+  "inputs": {
+    "date": "2026-11-17",
+    "narrative": "今天主要在优化性能,另外跟进了一下上线的事情,开了几个会,学习了一些新知识。"
+  },
+  "expect": {
+    "status": "ok",
+    "questions": "nonempty",
+    "max_questions": 3,
+    "all_sources": "manual"
+  }
+}

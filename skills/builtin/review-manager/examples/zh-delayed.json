@@ -1,0 +1,60 @@
+{
+  "name": "zh-delayed",
+  "lang": "zh",
+  "fewshot": true,
+  "inputs": {"member": "zhangsan", "date": "2026-11-17", "tone": "encouraging"},
+  "context": {
+    "member_report": {
+      "member": {"id": "zhangsan", "name": "张三", "org_unit": "支付组"},
+      "date": "2026-11-17",
+      "version": 1,
+      "items": [
+        {"kind": "done", "text": "上线支付回调重试机制,回调失败率从约 2% 降到 0.3%"},
+        {"kind": "progress", "text": "对账报表导出开发", "progress": "30%"},
+        {"kind": "blocker", "text": "导出功能缺少风控接口文档,暂无法联调", "need_from": "风控组", "severity": "high", "cross_team": true},
+        {"kind": "plan", "text": "继续对账报表导出", "priority": "P1"}
+      ],
+      "plan_check": [{"plan_text": "完成对账报表导出", "status": "in_progress", "note": "等风控文档"}]
+    },
+    "member_trends": {
+      "signals": [
+        {"type": "delayed_plan", "text": "完成对账报表导出", "reports": 2, "dates": ["2026-11-16", "2026-11-13"], "detail": {"in_progress_today": true}},
+        {"type": "lingering_blocker", "text": "导出功能缺少风控接口文档,暂无法联调", "reports": 2, "dates": ["2026-11-17", "2026-11-16"], "detail": {"severity": "high"}}
+      ],
+      "earlier_reports": [
+        {"date": "2026-11-16", "items": [
+          {"kind": "progress", "text": "对账报表导出开发", "progress": "30%"},
+          {"kind": "blocker", "text": "导出功能缺少风控接口文档", "need_from": "风控组", "severity": "high"},
+          {"kind": "plan", "text": "完成对账报表导出", "priority": "P1"}
+        ]},
+        {"date": "2026-11-13", "items": [{"kind": "plan", "text": "完成对账报表导出", "priority": "P1"}]}
+      ]
+    }
+  },
+  "output": {
+    "rating": "attention",
+    "summary": "上线了支付回调重试机制,回调失败率降到 0.3%;对账报表导出受风控接口文档阻塞,进度停在 30%。",
+    "issues": [
+      {
+        "type": "missing_plan",
+        "quote": "继续对账报表导出",
+        "explanation": "计划没有说明明天要推进到哪一步,也没有说明文档仍未到位时怎么安排。",
+        "suggestion": "写明明天的目标,例如:“完成导出数据层;风控文档未到则先用 mock 数据联调”。"
+      }
+    ],
+    "trend_flags": [
+      {"type": "delayed_plan", "text": "完成对账报表导出", "comment": "已连续两份日报计划完成但未完成,主要卡在风控文档。建议和他确认新的完成时间,以及能否先用 mock 数据推进。"},
+      {"type": "lingering_blocker", "text": "导出功能缺少风控接口文档,暂无法联调", "comment": "阻塞已持续两份日报,且依赖其他团队。如果本周内仍拿不到文档,可以考虑由你出面和风控组负责人沟通。"}
+    ],
+    "questions": [
+      "风控接口文档目前是谁在跟进?对方给过预计时间吗?",
+      "文档到位之前,导出功能有没有可以先推进的部分?",
+      "对账报表导出新的预计完成时间是哪天?"
+    ],
+    "feedback_draft": "张三,支付回调重试上线后失败率降到 0.3%,效果很明显,辛苦了!对账报表导出被风控文档卡住两天了,需要我去和风控组沟通的话随时说。明天的计划可以写得再具体一点,比如要完成到哪一步、文档还没到的话先做什么,这样大家更好配合。",
+    "escalation_candidates": [
+      {"text": "导出功能缺少风控接口文档,暂无法联调", "reason": "跨团队依赖,已持续两份日报未解决,影响对账报表交付"}
+    ]
+  },
+  "expect": {"status": "ok", "rating": ["attention", "risk"], "min_trend_flags": 2}
+}

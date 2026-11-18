@@ -1,0 +1,74 @@
+{
+  "name": "zh-on-track",
+  "lang": "zh",
+  "inputs": {
+    "member": "wangwu",
+    "date": "2026-11-17",
+    "tone": "encouraging"
+  },
+  "context": {
+    "member_report": {
+      "member": {
+        "id": "wangwu",
+        "name": "王五",
+        "org_unit": "支付组"
+      },
+      "date": "2026-11-17",
+      "version": 1,
+      "items": [
+        {
+          "kind": "done",
+          "text": "修复订单列表分页错乱问题(#1432),已合并并上线"
+        },
+        {
+          "kind": "done",
+          "text": "完成退款接口的单元测试,覆盖率从 62% 提到 85%"
+        },
+        {
+          "kind": "progress",
+          "text": "退款对账任务开发",
+          "progress": "50%",
+          "eta": "2026-11-19"
+        },
+        {
+          "kind": "plan",
+          "text": "完成退款对账任务的数据比对部分",
+          "priority": "P1"
+        }
+      ],
+      "plan_check": [
+        {
+          "plan_text": "修复订单列表分页问题",
+          "status": "done"
+        }
+      ]
+    },
+    "member_trends": {
+      "signals": [],
+      "earlier_reports": [
+        {
+          "date": "2026-11-16",
+          "items": [
+            {
+              "kind": "progress",
+              "text": "退款对账任务开发",
+              "progress": "20%"
+            },
+            {
+              "kind": "plan",
+              "text": "修复订单列表分页问题",
+              "priority": "P1"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": "ok",
+    "rating": "on_track",
+    "max_trend_flags": 0,
+    "max_issues": 1,
+    "max_consistency_notes": 0
+  }
+}

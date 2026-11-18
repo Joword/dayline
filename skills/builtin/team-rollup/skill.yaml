@@ -1,0 +1,22 @@
+name: team-rollup
+version: 1.0.0
+description: 汇总直属下属当天提交的日报,生成团队汇总草稿(亮点、风险、建议上报事项);管理者确认后才发送
+roles: [manager]
+triggers:
+  commands: ["/rollup", "dl team rollup"]
+  intents: ["团队汇总", "汇总下属日报", "team summary"]
+inputs:
+  - name: date
+    type: date
+    required: true
+    description: 汇总日期,默认今天
+context: [team_snapshot]
+rules: [members-known]
+model: large
+fallback: allow
+review_on_fallback: true
+output:
+  schema: schema.py:TeamRollupDraft
+  render: [markdown]
+  template: team_rollup
+permissions: [read:team_reports]

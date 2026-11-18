@@ -1,0 +1,36 @@
+name: review-manager
+version: 1.1.0
+description: 管理者审阅直属下属的日报:进展评级(✅/⚠️/🔴)、质量问题、跨日趋势、追问和反馈草稿
+roles: [manager]
+triggers:
+  commands: ["/team-review", "dl team review"]
+  intents: ["审阅下属日报", "看看他今天的日报", "review my report's daily"]
+inputs:
+  - name: member
+    type: string
+    required: true
+    description: 直属下属的用户 id
+    max_chars: 64
+  - name: date
+    type: date
+    required: true
+    description: 日报日期,默认今天
+  - name: tone
+    type: enum
+    choices: [encouraging, direct]
+    default: encouraging
+    description: 反馈草稿的语气:鼓励型 / 直接型
+    untrusted: false
+context:
+  - member_report
+  - member_trends
+  - {name: member_activity, optional: true}   # git / calendar, only with the member's consent
+rules: [quotes-grounded, signals-grounded, neutral-wording]
+model: large
+fallback: allow
+review_on_fallback: true
+output:
+  schema: schema.py:ManagerReview
+  render: [markdown]
+  template: manager_review
+permissions: [read:team_reports, read:team_activity]

@@ -1,0 +1,33 @@
+name: generate-daily
+version: 1.2.0
+description: 把当天的自述整理成结构化日报(已完成 / 进行中 / 阻塞 / 明日计划),并与上一份日报的计划对照
+roles: [member, manager]
+triggers:
+  commands: ["/gen", "dl gen"]
+  intents: ["写日报", "生成日报", "整理日报", "write my daily report"]
+inputs:
+  - name: date
+    type: date
+    required: true
+    description: 日报日期(YYYY-MM-DD),默认今天
+  - name: narrative
+    type: text
+    required: true
+    description: 今天做了什么,用自己的话写,越具体越好
+    max_chars: 20000
+  - name: answers
+    type: text
+    description: 对上一轮追问的补充回答(可选)
+    max_chars: 8000
+context:
+  - {name: own_activity, optional: true}   # today's git / calendar, auto-filled
+tools: [get_recent_reports]
+rules: [input-size, max-questions, sources-grounded, done-has-items]
+model: large
+fallback: allow
+max_tool_turns: 2
+output:
+  schema: schema.py:DailyReport
+  render: [markdown]
+  template: daily_report
+permissions: [read:own_reports, read:own_activity]

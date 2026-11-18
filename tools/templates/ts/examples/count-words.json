@@ -1,0 +1,6 @@
+{
+  "name": "count-words",
+  "tool": "count_words",
+  "input": {"text": "上线了支付回调重试\nfixed the retry"},
+  "expect": {"is_error": false, "contains": ["lines: 2"]}
+}

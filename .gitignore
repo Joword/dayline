@@ -1,0 +1,60 @@
+# secrets
+.env
+.env.*
+!.env.example
+secrets/
+.claude
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# node
+node_modules/
+.next/
+
+# build / packaging
+dist/
+build/
+*.tar
+*.tar.gz
+
+# runtime data
+backups/
+evals/results/
+backend/evals/results/
+
+# personal skills are mounted, not versioned
+skills/user/*
+!skills/user/.gitkeep
+
+# editors / os
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# collector credentials
+config/collector.yaml
+
+# member tools: generated per deployment; deploy/tools/*.env hold tool tokens
+docker-compose.tools.yml
+deploy/tools/
+
+# TLS material
+deploy/certs/*.crt
+deploy/certs/*.key
+deploy/certs/*.pem
+
+# docs kept local
+docs/diagrams/
+docs/PLAN.md
+docs/MANUAL.md

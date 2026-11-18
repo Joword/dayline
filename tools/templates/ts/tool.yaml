@@ -1,0 +1,13 @@
+# Member tool manifest (see tools/README.md). Copy the template to tools/<name>/ and edit.
+name: example-tool-ts
+owner: zhangsan                       # your Dayline user id
+version: 0.1.0
+language: typescript
+description: 字数统计和最近日报计划事项(TS 模板示例)
+image: registry.internal/tools/example-tool-ts   # CI builds it and submits the digest
+permissions: [read:own_reports]       # read:own_reports | read:own_activity | read:team_reports (manager data)
+network_egress: []                    # hosts the tool may reach, e.g. [jira.company.com]
+visibility: private                   # private | team | level | company
+manager_data: false
+timeout_s: 20
+resources: {cpus: 0.5, memory: 256m}

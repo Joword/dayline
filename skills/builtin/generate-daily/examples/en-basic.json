@@ -1,0 +1,58 @@
+{
+  "name": "en-basic",
+  "lang": "en",
+  "fewshot": true,
+  "inputs": {
+    "date": "2026-11-17",
+    "narrative": "Fixed the flaky login test that kept failing CI - it was a race on the session cache, CI is green again. Spent the afternoon on the search filters, about half done. Still waiting on design for the empty-state screens. Tomorrow: finish the filters and start the empty states if designs land."
+  },
+  "output": {
+    "kind": "individual",
+    "date": "2026-11-17",
+    "lang": "en",
+    "own_items": [
+      {
+        "kind": "done",
+        "text": "Fixed the flaky login test (race on the session cache); CI is green again",
+        "source": "manual"
+      },
+      {
+        "kind": "progress",
+        "text": "Search filters",
+        "source": "manual",
+        "progress": "50%"
+      },
+      {
+        "kind": "blocker",
+        "text": "Empty-state screens are waiting on designs",
+        "source": "manual",
+        "need_from": "Design",
+        "severity": "medium",
+        "cross_team": true
+      },
+      {
+        "kind": "plan",
+        "text": "Finish the search filters",
+        "source": "manual",
+        "priority": "P1"
+      },
+      {
+        "kind": "plan",
+        "text": "Start the empty-state screens once designs arrive",
+        "source": "manual",
+        "priority": "P2"
+      }
+    ],
+    "plan_check": [],
+    "questions": []
+  },
+  "expect": {
+    "status": "ok",
+    "min_items": {
+      "done": 1,
+      "blocker": 1,
+      "plan": 1
+    },
+    "all_sources": "manual"
+  }
+}

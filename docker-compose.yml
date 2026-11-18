@@ -1,0 +1,127 @@
+name: dayline
+
+# Shared settings of every service built from the backend image (api; later worker,
+# dingtalk, collector).
+x-backend: &backend
+  image: ${DAYLINE_REGISTRY:-}dayline-backend:${DAYLINE_IMAGE_TAG:-dev}
+  build:
+    context: .
+    dockerfile: docker/backend.Dockerfile
+    target: runtime
+  env_file:
+    - path: deploy/profiles/${DAYLINE_PROFILE:-server}.env
+      required: false
+    - path: .env
+      required: false
+  environment:
+    DAYLINE_HOME: /app
+    DAYLINE_MONGO_URI: mongodb://mongo:27017/dayline?replicaSet=rs0
+  volumes:
+    - ./skills/team:/app/skills/team:ro
+    - ./skills/user:/app/skills/user:ro
+  restart: unless-stopped
+  logging: &logging
+    driver: json-file
+    options: {max-size: "20m", max-file: "5"}
+
+services:
+  mongo:
+    image: mongo:8.0
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--wiredTigerCacheSizeGB", "${MONGO_CACHE_GB:-0.5}"]
+    volumes:
+      - mongo-data:/data/db        # named volume only; never a bind mount on /mnt/f
+    networks: [data]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+    logging: *logging
+
+  mongo-init:
+    image: mongo:8.0
+    depends_on:
+      mongo: {condition: service_healthy}
+    volumes:
+      - ./docker/mongo/init-replica.js:/init-replica.js:ro
+    entrypoint: ["mongosh", "--host", "mongo:27017", "--quiet", "/init-replica.js"]
+    networks: [data]
+    restart: "no"
+
+  api:
+    <<: *backend
+    depends_on:
+      mongo-init: {condition: service_completed_successfully}
+    networks: [data, egress, tools]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  # Web UI (Next.js). Talks to the API server-side only (BFF); browsers never reach the API.
+  web:
+    image: ${DAYLINE_REGISTRY:-}dayline-web:${DAYLINE_IMAGE_TAG:-dev}
+    build:
+      context: ./web
+      dockerfile: ../docker/web.Dockerfile
+      target: runtime
+    environment:
+      DAYLINE_API_URL: http://api:8000
+      DAYLINE_TIMEZONE: ${DAYLINE_TIMEZONE:-Asia/Shanghai}
+    depends_on:
+      api: {condition: service_healthy}
+    networks: [egress]
+    restart: unless-stopped
+    logging: *logging
+
+  # Single instance by design (a lease in Mongo keeps a second one idle): deadlines,
+  # roll-up drafts; later org sync and the outbox.
+  worker:
+    <<: *backend
+    command: ["python", "-m", "app.cli", "worker"]
+    depends_on:
+      mongo-init: {condition: service_completed_successfully}
+    networks: [data, egress, tools]
+    healthcheck:
+      disable: true   # no HTTP endpoint; the image's /healthz check does not apply
+
+  # DingTalk Stream bot (plan §10): outbound long connection, no public callback URL.
+  # Exactly one instance; enabled once DAYLINE_DINGTALK_APP_KEY / _APP_SECRET are set.
+  dingtalk:
+    <<: *backend
+    profiles: ["dingtalk"]
+    command: ["python", "-m", "app.cli", "dingtalk", "bot"]
+    depends_on:
+      mongo-init: {condition: service_completed_successfully}
+    networks: [data, egress, tools]
+    healthcheck:
+      disable: true
+
+  # Intranet collector (plan §9.3): only when the main system runs outside the intranet.
+  # Reads config/collector.yaml (secrets as ${ENV}) and pushes activity summaries to the
+  # main API. Enable with `--profile collector`; schedule `push` with cron or a loop.
+  collector:
+    <<: *backend
+    profiles: ["collector"]
+    command: ["sh", "-c", "while true; do python -m app.cli collector push -c /app/config/collector.yaml; sleep 1800; done"]
+    volumes:
+      - ./config/collector.yaml:/app/config/collector.yaml:ro
+    networks: [egress]
+    healthcheck:
+      disable: true
+
+volumes:
+  mongo-data:
+
+networks:
+  data:
+    internal: true    # mongo is reachable only from services on this network
+  egress: {}          # outbound access (LLM endpoints, later git/calendar/DingTalk)
+  # Member tool containers (docker-compose.tools.yml, `dl tools compose`) live only here: they
+  # reach the API for Relay callbacks and the outside world only via egress-proxy (M7).
+  tools:
+    internal: true

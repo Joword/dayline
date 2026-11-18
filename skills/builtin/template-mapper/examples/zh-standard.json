@@ -1,0 +1,18 @@
+{
+  "name": "zh-standard",
+  "lang": "zh",
+  "fewshot": true,
+  "inputs": {"template": "## 今日完成工作\n## 未完成工作\n## 需协调工作\n## 明日计划\n## 备注"},
+  "output": {
+    "fields": [
+      {"dingtalk_field": "今日完成工作", "source": ["own_items[kind=done]"], "format": "numbered_list"},
+      {"dingtalk_field": "未完成工作", "source": ["own_items[kind=progress]"], "format": "numbered_list"},
+      {"dingtalk_field": "需协调工作", "source": ["own_items[kind=blocker]", "team_summary.escalations"], "format": "numbered_list"},
+      {"dingtalk_field": "明日计划", "source": ["own_items[kind=plan]"], "format": "numbered_list"},
+      {"dingtalk_field": "备注", "source": ["team_summary.summary"], "format": "text"}
+    ],
+    "unmapped_policy": "append_to_last",
+    "notes": ["“备注”含义宽泛,暂放团队整体情况;个人日报中该字段可能为空。"]
+  },
+  "expect": {"status": "ok"}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "en-mixed-report",
+  "lang": "en",
+  "inputs": {
+    "report": "Today:\n- Finished the CSV import (merged, PR #91)\n- Looked into the slow dashboard\n- Some meetings\nBlocked: waiting on ops\nTomorrow: dashboard",
+    "author": "Sam"
+  },
+  "expect": {"status": "ok", "min_issues": 2}
+}

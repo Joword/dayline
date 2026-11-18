@@ -1,0 +1,29 @@
+# Example org file for `dl org import config/org.example.yaml`.
+# A full snapshot: every person with their manager. ids: letters, digits, . _ -
+# roles: system roles only (admin | developer) - they grant no access to report data.
+users:
+  - id: boss
+    name: 赵总
+    email: boss@example.com
+    roles: [admin]
+
+  - id: lisi
+    name: 李四
+    email: lisi@example.com
+    manager: boss
+    org_unit: 支付组
+
+  - id: zhangsan
+    name: 张三
+    email: zhangsan@example.com
+    manager: lisi
+    org_unit: 支付组
+    lang: zh
+    git:
+      - {provider: gitlab, username: zhangsan, emails: [zhangsan@example.com]}
+      - {provider: github, username: zhangsan-dev}
+
+  - id: wangwu
+    name: 王五
+    manager: lisi
+    org_unit: 支付组

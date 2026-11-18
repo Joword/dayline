@@ -1,0 +1,32 @@
+{
+  "name": "en-team",
+  "lang": "en",
+  "inputs": {"date": "2026-11-17"},
+  "context": {
+    "team_snapshot": {
+      "date": "2026-11-17",
+      "members": [
+        {
+          "id": "sam", "name": "Sam", "on_track": true,
+          "items": [
+            {"kind": "done", "text": "Shipped the CSV import (PR #91), used by 3 customers on day one"},
+            {"kind": "progress", "text": "Dashboard query optimisation", "progress": "50%"}
+          ],
+          "signals": []
+        },
+        {
+          "id": "alex", "name": "Alex", "on_track": false,
+          "items": [
+            {"kind": "blocker", "text": "Staging database is out of disk; integration tests cannot run", "need_from": "Ops", "severity": "high", "cross_team": true},
+            {"kind": "plan", "text": "Finish the billing webhook once staging is back", "priority": "P1"}
+          ],
+          "signals": [
+            {"type": "lingering_blocker", "text": "Staging database is out of disk; integration tests cannot run", "reports": 2, "dates": ["2026-11-17", "2026-11-16"], "detail": {"severity": "high"}}
+          ]
+        }
+      ],
+      "missing": [{"id": "kim", "name": "Kim"}]
+    }
+  },
+  "expect": {"status": "ok", "members_exclude": ["kim"], "stats": {"members": 3, "submitted": 2, "on_track": 1}, "min_escalations": 1}
+}

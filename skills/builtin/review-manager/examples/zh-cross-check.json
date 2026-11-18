@@ -1,0 +1,74 @@
+{
+  "name": "zh-cross-check",
+  "lang": "zh",
+  "fewshot": true,
+  "inputs": {"member": "wangwu", "date": "2026-11-17", "tone": "encouraging"},
+  "context": {
+    "member_report": {
+      "member": {"id": "wangwu", "name": "王五", "org_unit": "支付组"},
+      "date": "2026-11-17",
+      "version": 1,
+      "items": [
+        {"kind": "done", "text": "完成退款接口与财务系统的联调"},
+        {"kind": "progress", "text": "退款对账任务开发", "progress": "50%", "eta": "2026-11-19"},
+        {"kind": "plan", "text": "完成退款对账任务的数据比对部分", "priority": "P1"}
+      ],
+      "plan_check": []
+    },
+    "member_trends": {"signals": [], "earlier_reports": []},
+    "member_activity": {
+      "date": "2026-11-17",
+      "git": {
+        "provider": "gitlab",
+        "repos": [
+          {
+            "repo": "pay/refund-reconcile",
+            "commit_count": 6,
+            "prs": [],
+            "other_commits": [
+              {"title": "feat: reconcile job skeleton", "url": "https://gitlab.example.com/pay/refund-reconcile/-/commit/a1", "time": "11:20"},
+              {"title": "feat: load refund records by day", "url": "https://gitlab.example.com/pay/refund-reconcile/-/commit/a2", "time": "16:05"}
+            ]
+          }
+        ],
+        "totals": {"commits": 6, "repos": 1, "prs": 0},
+        "dropped": {}
+      },
+      "calendar": {
+        "events": [
+          {"title": "供应商接口问题沟通", "start": "14:00", "end": "17:00", "minutes": 180, "attendees": 5, "organizer": true}
+        ],
+        "count": 1,
+        "total_minutes": 180,
+        "dropped": {}
+      },
+      "unavailable": {},
+      "errors": {}
+    }
+  },
+  "output": {
+    "rating": "on_track",
+    "summary": "完成了退款接口与财务系统的联调,退款对账任务开发过半。",
+    "issues": [],
+    "trend_flags": [],
+    "questions": [
+      "退款接口和财务系统的联调是在哪个环境做的?有遗留问题吗?",
+      "下午和供应商沟通的接口问题有结论吗,会影响退款对账的排期吗?"
+    ],
+    "feedback_draft": "王五,退款对账任务推进得很稳,今天提交也很扎实,辛苦了!下午和供应商沟通了三个小时,如果有结论或者需要协调的地方,可以在日报里写一句,方便大家了解进展。",
+    "escalation_candidates": [],
+    "consistency_notes": [
+      {
+        "text": "日报写完成了退款接口与财务系统的联调,git 中当天的提交都在退款对账仓库,没有看到联调相关的改动。",
+        "evidence": "日报“完成退款接口与财务系统的联调” vs git:pay/refund-reconcile 的 6 个提交",
+        "suggestion": "联调可能不需要改代码或在其他仓库,可以问问联调是在哪里做的、结果如何。"
+      },
+      {
+        "text": "日历显示下午有 3 小时的“供应商接口问题沟通”,日报没有提到。",
+        "evidence": "日历 14:00–17:00 供应商接口问题沟通(由他组织)",
+        "suggestion": "可以问问沟通的结论,以及是否需要写进日报或上报。"
+      }
+    ]
+  },
+  "expect": {"status": "ok", "min_consistency_notes": 1}
+}

@@ -1,0 +1,24 @@
+name: template-mapper
+version: 1.0.0
+description: 识别公司钉钉日志模板的字段,生成 Dayline 日报到钉钉日志的字段映射草稿(由人确认后生效)
+roles: [member, manager]
+triggers:
+  commands: ["dl template map"]
+inputs:
+  - name: template
+    type: text
+    required: true
+    description: 钉钉日志模板(config/templates/dingtalk_report.md 的内容)
+    max_chars: 8000
+  - name: fields
+    type: string
+    description: 从钉钉接口读到的字段名,逗号分隔(可选;提供时以它为准)
+    max_chars: 1000
+rules: [input-size, mapping-valid]
+model: small
+fallback: allow
+output:
+  schema: schema.py:TemplateMappingDraft
+  render: [markdown]
+  template: generic
+permissions: []

@@ -1,0 +1,62 @@
+# Dayline gateway: the only public entry point (plan §12.1).
+#
+#   DAYLINE_DOMAIN     site address (default: localhost)
+#   DAYLINE_TLS_MODE   auto     - public domain, certificates from Let's Encrypt / ZeroSSL (cloud)
+#                      files    - company-issued certificate at /certs/dayline.crt + .key (intranet)
+#                      internal - Caddy's local CA, for testing (default)
+#
+#   /v1/*  -> API (CLI, VSCode, DingTalk bot, collector: personal or service tokens)
+#   /*     -> Web (the browser never talks to the API directly; the web server proxies)
+#   /v1/internal/tool/* is not routed: member tools call it on the internal `tools` network.
+{
+	admin off
+}
+
+(tls_auto) {
+}
+
+(tls_files) {
+	tls /certs/dayline.crt /certs/dayline.key
+}
+
+(tls_internal) {
+	tls internal
+}
+
+{$DAYLINE_DOMAIN:localhost} {
+	import tls_{$DAYLINE_TLS_MODE:internal}
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	request_body {
+		max_size 2MB
+	}
+
+	handle /v1/internal/tool/* {
+		respond 404
+	}
+
+	handle_path /v1/* {
+		reverse_proxy api:8000
+	}
+
+	handle /healthz {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		reverse_proxy web:3000
+	}
+
+	log {
+		output stdout
+		format json
+	}
+}

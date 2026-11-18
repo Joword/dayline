@@ -1,0 +1,6 @@
+{
+  "name": "en-simple",
+  "lang": "en",
+  "inputs": {"template": "Done today:\nTomorrow:", "fields": "Done today,Tomorrow"},
+  "expect": {"status": "ok"}
+}

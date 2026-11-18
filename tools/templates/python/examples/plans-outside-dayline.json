@@ -1,0 +1,6 @@
+{
+  "name": "plans-outside-dayline",
+  "tool": "my_recent_plans",
+  "input": {"days": 2},
+  "expect": {"is_error": false, "contains": ["not available"]}
+}
