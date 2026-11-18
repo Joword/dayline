@@ -5,7 +5,7 @@
 **An AI daily-report assistant for teams.**<br>
 Members write a few sentences, managers review and confirm, and the model only ever drafts.
 
-![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)![Next.js 16](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)![MongoDB 8](https://img.shields.io/badge/MongoDB-8-47A248?logo=mongodb&logoColor=white)![MCP](https://img.shields.io/badge/member%20tools-MCP-6E56CF)![Status](https://img.shields.io/badge/status-M7%20of%208-orange)
+![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)![Next.js 16](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)![MongoDB 8](https://img.shields.io/badge/MongoDB-8-47A248?logo=mongodb&logoColor=white)![MCP](https://img.shields.io/badge/member%20tools-MCP-6E56CF)![Status](https://img.shields.io/badge/status-M8%20of%208-2EA44F)
 
 [Features](#features) · [How it works](#how-it-works) · [Quick start](#quick-start) · [Extending](#extending) · [Deployment](#deployment)
 
@@ -106,7 +106,7 @@ output: {schema: schema.py:DailyReport, template: daily_report}
 permissions: [read:own_reports, read:own_activity]
 ```
 
-`inputs` also generate the web form. Each example in `examples/` serves as a few-shot example and as an eval case. Format reference: [skills/README.md](skills/README.md).
+`inputs` also generate the web form. Each example in `examples/` serves as a few-shot example and as an eval case. `skills/team/weekly-rollup` and `skills/team/daily-to-english` are worked examples. Format reference: [skills/README.md](skills/README.md).
 
 ### Member tools
 

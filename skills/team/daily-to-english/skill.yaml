@@ -1,0 +1,21 @@
+name: daily-to-english
+version: 1.0.0
+description: 把一份日报翻译成英文,保留结构和事实
+roles: [member, manager]
+triggers:
+  commands: ["/to-en"]
+  intents: ["日报翻译成英文", "把日报译成英文", "translate this report into English"]
+inputs:
+  - name: report
+    type: text
+    required: true
+    description: 要翻译的日报原文
+    max_chars: 20000
+rules: [input-size]
+model: large
+fallback: allow
+output:
+  schema: schema.json
+  render: [markdown]
+  template: generic
+permissions: []

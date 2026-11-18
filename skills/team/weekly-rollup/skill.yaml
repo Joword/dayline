@@ -1,0 +1,22 @@
+name: weekly-rollup
+version: 1.0.0
+description: 把最近几天自己提交的日报收成一份周报
+roles: [member, manager]
+triggers:
+  commands: ["/weekly"]
+  intents: ["写周报", "生成本周周报", "weekly summary", "write my weekly report"]
+inputs:
+  - name: notes
+    type: text
+    description: 日报里没有的补充,例如这周的背景(可选)
+    max_chars: 8000
+tools: [get_recent_reports]
+rules: [input-size]
+model: large
+fallback: allow
+max_tool_turns: 2
+output:
+  schema: schema.json
+  render: [markdown]
+  template: generic
+permissions: [read:own_reports]

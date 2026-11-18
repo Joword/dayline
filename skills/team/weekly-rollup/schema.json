@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["period", "summary", "highlights", "risks", "next_week"],
+  "properties": {
+    "period": {
+      "type": "string",
+      "description": "The dates actually covered, taken from the reports that were read"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Two or three sentences on what was delivered"
+    },
+    "highlights": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "risks": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Open blockers. Empty when none were reported"
+    },
+    "next_week": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Plans that are still open"
+    }
+  }
+}

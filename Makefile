@@ -63,8 +63,8 @@ logs:  ## follow logs
 	$(COMPOSE) logs -f --tail=200
 
 build:  ## build the backend and web images tagged with the git sha
-	docker build -f docker/backend.Dockerfile -t dayline-backend:$(TAG) .
-	docker build -f docker/web.Dockerfile -t dayline-web:$(TAG) web
+	docker build -f docker/backend.Dockerfile --target runtime -t dayline-backend:$(TAG) .
+	docker build -f docker/web.Dockerfile --target runtime -t dayline-web:$(TAG) web
 
 tools-review:  ## CI review of a member tool locally: make tools-review TOOL=tools/<name>
 	@test -n "$(TOOL)" || (echo "usage: make tools-review TOOL=tools/<name>" && exit 1)

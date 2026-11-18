@@ -44,7 +44,9 @@ def test_builtin_skills_load_cleanly():
     reg = registry(SKILLS)
     assert reg.problems == []
     names = {s.name for s in reg.list()}
-    assert {"generate-daily", "review-member"} <= names
+    assert {"generate-daily", "review-member", "weekly-rollup", "daily-to-english"} <= names
+    assert reg.get("weekly-rollup").layer == "team"
+    assert reg.get("daily-to-english").output_schema is not None
     gd = reg.get("generate-daily")
     assert gd.layer == "builtin" and gd.langs == ["en", "zh"]
     assert gd.output_model is not None and gd.output_schema["title"] == "DailyReport"

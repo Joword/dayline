@@ -10,6 +10,8 @@ A skill is a directory. The system scans three layers:
 
 Names must be unique across layers: a `team/` or `user/` skill cannot reuse a built-in name.
 
+Two samples ship in `team/` and are mounted with the rest of that layer: `weekly-rollup` reads the caller's recent reports and drafts a weekly summary, and `daily-to-english` translates a pasted report into English. Both use `schema.json`, which is what a team skill has to use.
+
 ## Adding a skill (no Python needed)
 
 ```

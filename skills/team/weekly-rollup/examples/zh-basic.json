@@ -1,0 +1,14 @@
+{
+  "name": "zh-basic",
+  "lang": "zh",
+  "fewshot": true,
+  "inputs": {"notes": "沙箱证书还在运维那边。"},
+  "output": {
+    "period": "2026-11-17..2026-11-18",
+    "summary": "支付回调重试已上线。对账仍卡在沙箱证书。",
+    "highlights": ["支付回调重试上线,失败率从 2% 降到 0.3%。"],
+    "risks": ["沙箱银行证书过期,需要运维。待确认:还没有新的时间。"],
+    "next_week": ["对账导出"]
+  },
+  "expect": {"status": "ok"}
+}

@@ -38,9 +38,11 @@ skills/user/*
 # editors / os
 .idea/
 .vscode/*
+vscode-ext/
 !.vscode/extensions.json
 .DS_Store
 Thumbs.db
+.github/
 
 # collector credentials
 config/collector.yaml

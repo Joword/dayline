@@ -1,0 +1,14 @@
+{
+  "name": "en-basic",
+  "lang": "en",
+  "fewshot": true,
+  "inputs": {"notes": "The sandbox certificate is still with ops."},
+  "output": {
+    "period": "2026-11-17..2026-11-18",
+    "summary": "The payment callback retry shipped. Reconciliation is still blocked on the sandbox certificate.",
+    "highlights": ["Shipped the payment callback retry; failure rate 2% to 0.3%."],
+    "risks": ["Sandbox bank certificate expired. Needs ops. To be confirmed: no new date."],
+    "next_week": ["Reconciliation export"]
+  },
+  "expect": {"status": "ok"}
+}

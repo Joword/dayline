@@ -86,7 +86,7 @@ Examples run in CI without a Dayline grant, and outbound network is not guarante
 
 ## 4. Submit and CI
 
-On a pull request, CI runs `tools/ci/review.sh tools/<name>`. After merge it runs `tools/ci/review.sh tools/<name> --submit`, which pushes the image and submits `tool.yaml`, the image digest and `tools/list` to Dayline. Locally, `make tools-review TOOL=tools/<name>` does the same checks and needs Docker.
+`make tools-review TOOL=tools/<name>` runs `tools/ci/review.sh` locally and needs Docker. It checks only. `tools/ci/review.sh tools/<name> --submit` pushes the image and submits `tool.yaml`, the image digest and `tools/list`, and needs a registry plus `DAYLINE_URL` and `DAYLINE_API_TOKEN`.
 
 CI runs the container the way production does: a read-only filesystem (only `/tmp` is writable, 64 MB), all capabilities dropped, uid 65532, and memory and process limits. A request without the token must return 401.
 

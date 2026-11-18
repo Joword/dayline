@@ -1,0 +1,16 @@
+{
+  "name": "zh-basic",
+  "lang": "zh",
+  "fewshot": true,
+  "inputs": {
+    "report": "日报 2026-11-18\n已完成:支付回调重试上线,失败率从 2% 降到 0.3%。\n阻塞:沙箱银行证书过期,需要运维。\n明日计划:对账导出。"
+  },
+  "output": {
+    "title": "Daily report 2026-11-18",
+    "done": ["Shipped the payment callback retry. Failure rate went from 2% to 0.3%."],
+    "in_progress": [],
+    "blockers": ["The sandbox bank certificate has expired. Needs ops."],
+    "plan": ["Reconciliation export."]
+  },
+  "expect": {"status": "ok", "contains": ["0.3%"]}
+}
