@@ -1,0 +1,58 @@
+{
+  "name": "dayline",
+  "displayName": "Dayline",
+  "description": "Run Dayline skills from the command palette",
+  "version": "0.1.0",
+  "publisher": "dayline",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dayline.run",
+        "title": "Dayline: Run a skill"
+      },
+      {
+        "command": "dayline.refresh",
+        "title": "Dayline: Refresh skills"
+      }
+    ],
+    "configuration": {
+      "title": "Dayline",
+      "properties": {
+        "dayline.apiUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8000",
+          "description": "API base URL. Behind the gateway this is https://<host>/v1."
+        },
+        "dayline.token": {
+          "type": "string",
+          "default": "",
+          "description": "Personal token (dl_...) or the service token. Leave empty in dev mode."
+        },
+        "dayline.user": {
+          "type": "string",
+          "default": "",
+          "description": "User id sent as X-Dayline-User with the service token or in dev mode."
+        },
+        "dayline.lang": {
+          "type": "string",
+          "enum": ["zh", "en"],
+          "default": "zh",
+          "description": "Language sent with the run."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ."
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.9.3"
+  }
+}

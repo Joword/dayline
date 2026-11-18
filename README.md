@@ -108,6 +108,20 @@ permissions: [read:own_reports, read:own_activity]
 
 `inputs` also generate the web form. Each example in `examples/` serves as a few-shot example and as an eval case. `skills/team/weekly-rollup` and `skills/team/daily-to-english` are worked examples. Format reference: [skills/README.md](skills/README.md).
 
+### VS Code
+
+The extension source is in the repository. Cloning does not install it. From a fresh checkout:
+
+```bash
+cd vscode-ext
+npm install
+npm run compile
+npx @vscode/vsce package
+code --install-extension dayline-0.1.0.vsix
+```
+
+Set `dayline.apiUrl` and `dayline.token` in VS Code. Details: [vscode-ext/README.md](vscode-ext/README.md).
+
 ### Member tools
 
 Anyone on the team can add a data source as an MCP server in any language, starting from the Python or TypeScript template.
@@ -140,6 +154,7 @@ Docker Compose runs Caddy (the only public port), the API, the worker, the web a
 | [Skills](skills/README.md) | writing skills, context providers |
 | [Member tools](tools/README.md) | writing, testing and reviewing MCP tools |
 | [Evals](backend/evals/README.md) | running skill evals against real endpoints |
+| [VS Code](vscode-ext/README.md) | install the extension from a checkout |
 
 ## Development
 
@@ -157,6 +172,7 @@ backend/   FastAPI app, dl CLI, worker, DingTalk bot, tests, evals
 web/       Next.js app (backend-for-frontend)
 skills/    builtin / team / user skills
 tools/     member tool templates and the CI review script
+vscode-ext/  VS Code extension source; build and install locally
 config/    LLM endpoints, org sample, schedules, templates
 docker/    images, Caddy, Mongo init       deploy/   profiles, certificates
 docs/      images
