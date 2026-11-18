@@ -121,8 +121,6 @@ class EndpointConfig(BaseModel):
         """Static reasons this endpoint cannot be used at all (config, not runtime health)."""
         if not self.enabled:
             return "disabled in config"
-        if self.adapter != "anthropic":
-            return f"adapter '{self.adapter}' is not implemented yet"
         if not any(self.models.values()):
             return "no model names configured (TODO)"
         if not self.api_key():

@@ -28,6 +28,7 @@ from collections.abc import AsyncIterator, Awaitable, Callable
 
 from app.llm.adapters.anthropic import AnthropicAdapter
 from app.llm.adapters.base import AdapterDone, LLMAdapter
+from app.llm.adapters.openai_compat import OpenAICompatAdapter
 from app.llm.endpoints import CircuitBreakerConfig, EndpointConfig, LLMConfig
 from app.llm.types import (
     Attempt,
@@ -113,7 +114,9 @@ class LLMGateway:
     ):
         self.config = config
         self.adapters: dict[str, LLMAdapter] = (
-            adapters if adapters is not None else {"anthropic": AnthropicAdapter()}
+            adapters
+            if adapters is not None
+            else {"anthropic": AnthropicAdapter(), "openai_compat": OpenAICompatAdapter()}
         )
         self.breakers = {
             ep.name: CircuitBreaker(config.failover.circuit_breaker, clock) for ep in config.endpoints

@@ -46,7 +46,7 @@ Deadlines are staggered per level (`config/schedules.yaml`), so a manager's roll
 
 ## Quick start
 
-You need Python 3.12, Node.js 24, Docker (for MongoDB 8 and the dev stack), and an Anthropic API key or access to a corporate LLM gateway. On Windows, use WSL and keep the venv and `node_modules` on the Linux filesystem.
+You need Python 3.12, Node.js 24, Docker (for MongoDB 8 and the dev stack), and an API key for Anthropic or an OpenAI-compatible endpoint. The key stays in the environment. On Windows, use WSL and keep the venv and `node_modules` on the Linux filesystem.
 
 ```bash
 make venv                                   # backend + dev extras in ~/.venvs/dayline

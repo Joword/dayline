@@ -19,20 +19,33 @@ endpoints:
     server_fallback_models: [claude-sonnet-5-5]
 
   - name: corp-gateway                    # corp LLM gateway; forwards only to intranet models
-    adapter: anthropic                    # Anthropic-compatible mode first; switch to openai_compat if it falls short
+    adapter: anthropic                    # or openai_compat, for a gateway that speaks Chat Completions
     base_url: ${DAYLINE_CORP_LLM_URL:-https://llm.corp.internal}
     api_key_env: CORP_LLM_API_KEY
-    auth_header: x-api-key                # check what the gateway expects: bearer | x-api-key
-    models: {small: TODO, large: TODO}    # intranet model names
+    auth_header: x-api-key                # bearer | x-api-key
+    # Names and capabilities stay out of git. Unset values load as unknown and this endpoint stays off.
+    models:
+      small: ${DAYLINE_CORP_MODEL_SMALL:-TODO}
+      large: ${DAYLINE_CORP_MODEL_LARGE:-TODO}
     max_data_level: L3                    # data stays inside the intranet
-    max_context: TODO
-    features: {tool_calling: TODO, json_schema: TODO, streaming: TODO, prompt_caching: false, effort: false}
+    max_context: ${DAYLINE_CORP_MAX_CONTEXT:-TODO}
+    features:
+      tool_calling: ${DAYLINE_CORP_TOOL_CALLING:-TODO}
+      json_schema: ${DAYLINE_CORP_JSON_SCHEMA:-TODO}
+      streaming: ${DAYLINE_CORP_STREAMING:-TODO}
+      prompt_caching: false
+      effort: false
     max_tool_turns: 1                     # lower tool budget on the backup endpoint
     prompt_variant: corp                  # uses prompt.<lang>.corp.md where a skill provides one
 
-  # - name: local-model                   # reserved: self-hosted intranet model, not developed yet
+  # OpenAI-compatible endpoint (OpenAI, vLLM, or another Chat Completions server).
+  # Uncomment, set the key in OPENAI_API_KEY, and add the name to failover.order.
+  # - name: openai
   #   adapter: openai_compat
-  #   base_url: http://llm-local:8000
+  #   base_url: https://api.openai.com/v1   # include the /v1 prefix the server expects
+  #   api_key_env: OPENAI_API_KEY
+  #   models: {small: gpt-4.1-mini, large: gpt-4.1}
+  #   features: {tool_calling: true, json_schema: true, streaming: true, prompt_caching: false, effort: false}
 
 failover:
   order: [anthropic-direct, anthropic-via-proxy, corp-gateway]

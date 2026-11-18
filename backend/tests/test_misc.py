@@ -30,6 +30,22 @@ def test_repo_endpoint_config_loads(monkeypatch):
     assert cfg.pricing["claude-sonnet-5-5"].cost(1_000_000, 0, 0, 0) == pytest.approx(2.0)
 
 
+def test_corp_gateway_reads_names_from_the_environment(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-x")
+    monkeypatch.setenv("CORP_LLM_API_KEY", "corp")
+    monkeypatch.setenv("DAYLINE_CORP_MODEL_SMALL", "small-m")
+    monkeypatch.setenv("DAYLINE_CORP_MODEL_LARGE", "large-m")
+    monkeypatch.setenv("DAYLINE_CORP_MAX_CONTEXT", "128000")
+    monkeypatch.setenv("DAYLINE_CORP_TOOL_CALLING", "true")
+    monkeypatch.setenv("DAYLINE_CORP_JSON_SCHEMA", "true")
+    monkeypatch.setenv("DAYLINE_CORP_STREAMING", "false")
+    corp = load_llm_config(REPO / "config" / "llm_endpoints.yaml").endpoint("corp-gateway")
+    assert corp.model_for("small") == "small-m" and corp.model_for("large") == "large-m"
+    assert corp.max_context == 128000
+    assert corp.features.tool_calling is True and corp.features.streaming is False
+    assert corp.unavailable_reason() is None
+
+
 def test_config_validation():
     with pytest.raises(ValueError, match="unknown endpoints"):
         LLMConfig.model_validate({"endpoints": [{"name": "a"}], "failover": {"order": ["a", "b"]}})
